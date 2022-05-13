@@ -27,29 +27,14 @@ public class Cuenta {
   }
 
   public void poner(double cuanto) {
-    if (esMontoPositivo(cuanto)) {
-    }
-
-    if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= 3) {
-      throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
-    }
-
-    new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
+    if (esMontoPositivo(cuanto) && noExcedioLaMaximaCantidadDeDepositos()) {
+    	new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
   }
-
+  }
   public void sacar(double cuanto) { 
-    if (esMontoPositivo(cuanto)) {
+    if (esMontoPositivo(cuanto) && noExcedeSaldoMenor(cuanto) && noSuperaMaximoExtraccionDiario(cuanto)) {
+    	new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
     }
-    if (getSaldo() - cuanto < 0) {
-      throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
-    }
-    double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
-    double limite = 1000 - montoExtraidoHoy;
-    if (cuanto > limite) {
-      throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000
-          + " diarios, límite: " + limite);
-    }
-    new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
   }
 
   public void agregarMovimiento(LocalDate fecha, double cuanto, boolean esDeposito) {
@@ -84,6 +69,37 @@ public class Cuenta {
 	  else {
 		  return true;
 	  }
+  }
+  //CODE SMELL: LONG METHOD
+  
+  public boolean noExcedeSaldoMenor(double monto) {
+	    if (getSaldo() - monto < 0) {
+	        throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
+	      }
+	    else {
+	    	return true;
+	    }
+  }
+  
+  public boolean noSuperaMaximoExtraccionDiario(double monto) {
+	  double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
+	  double limite = 1000 - montoExtraidoHoy;
+	    if (monto > limite) {
+	      throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000
+	          + " diarios, límite: " + limite);
+	    }
+	    else {
+	    	return true;
+	    }
+  }
+  
+  public boolean noExcedioLaMaximaCantidadDeDepositos() {
+	   if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= 3) {
+	        throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
+	    }
+	   else {
+		   return true;
+	   }
   }
 
 }
