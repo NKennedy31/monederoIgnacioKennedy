@@ -18,9 +18,9 @@ public class Cuenta {
     saldo = 0;
   }*/
 
-  public Cuenta(double montoInicial) {
+  /*public Cuenta() {
     saldo = montoInicial;
-  }
+  }*/
 
   public void setMovimientos(List<Movimiento> movimientos) {
     this.movimientos = movimientos;
@@ -28,7 +28,8 @@ public class Cuenta {
 
   public void poner(double cuanto) {
     if (esMontoPositivo(cuanto) && noExcedioLaMaximaCantidadDeDepositos()) {
-    	new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
+    	//new Movimiento(LocalDate.now(), cuanto, true).agregateA(this); CODE SMELL: FEATURE ENVY
+    	this.agregarMovimiento(LocalDate.now(), cuanto, true);
   }
   }
   public void sacar(double cuanto) { 
