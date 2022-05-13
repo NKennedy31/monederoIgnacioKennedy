@@ -14,11 +14,11 @@ public class Cuenta {
   private double saldo = 0;
   private List<Movimiento> movimientos = new ArrayList<>();
 
-  /*public Cuenta() { //CODE SMELL: Logica Duplicada
+  /*public Cuenta() { //CODE SMELL: Logica Duplicada 
     saldo = 0;
   }*/
 
-  /*public Cuenta() {
+  /*public Cuenta() { // REDUNDANTE(montoInicial de donde sale)
     saldo = montoInicial;
   }*/
 
@@ -29,12 +29,14 @@ public class Cuenta {
   public void poner(double cuanto) {
     if (esMontoPositivo(cuanto) && noExcedioLaMaximaCantidadDeDepositos()) {
     	//new Movimiento(LocalDate.now(), cuanto, true).agregateA(this); CODE SMELL: FEATURE ENVY
+    	this.setSaldo(calcularValor(true, cuanto));
     	this.agregarMovimiento(LocalDate.now(), cuanto, true);
   }
   }
   public void sacar(double cuanto) { 
     if (esMontoPositivo(cuanto) && noExcedeSaldoMenor(cuanto) && noSuperaMaximoExtraccionDiario(cuanto)) {
-    	new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
+    	this.setSaldo(calcularValor(false, cuanto));
+    	this.agregarMovimiento(LocalDate.now(), cuanto, false);
     }
   }
 
@@ -43,6 +45,14 @@ public class Cuenta {
     movimientos.add(movimiento);
   }
 
+  public double calcularValor(boolean valor, double monto) {
+	    if (valor) {
+	      return this.getSaldo() + monto;
+	    } else {
+	      return this.getSaldo() - monto;
+	    }
+  }
+	    
   public double getMontoExtraidoA(LocalDate fecha) { 
     return getMovimientos().stream()
         .filter(movimiento -> !movimiento.isDeposito() && movimiento.getFecha().equals(fecha))
@@ -102,5 +112,4 @@ public class Cuenta {
 		   return true;
 	   }
   }
-
 }

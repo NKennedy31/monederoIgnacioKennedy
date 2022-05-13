@@ -40,20 +40,20 @@ public class Movimiento {
     return esDeposito;
   }
 
-  public boolean isExtraccion() {
+  public boolean isExtraccion() { 
     return !esDeposito;
   }
 
-  public void agregateA(Cuenta cuenta) {
+ /* public void agregateA(Cuenta cuenta) { //Es responsabilidad de la cuenta agregar movimientos(agregarMovimiento())
     cuenta.setSaldo(calcularValor(cuenta));
     cuenta.agregarMovimiento(fecha, monto, esDeposito);
   }
 
-  public double calcularValor(Cuenta cuenta) {
+  public double calcularValor(Cuenta cuenta) { //Esto lo deberia hacer la cuenta
     if (esDeposito) {
       return cuenta.getSaldo() + getMonto();
     } else {
       return cuenta.getSaldo() - getMonto();
     }
-  }
+  }*/
 }
