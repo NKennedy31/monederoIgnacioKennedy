@@ -14,9 +14,9 @@ public class Cuenta {
   private double saldo = 0;
   private List<Movimiento> movimientos = new ArrayList<>();
 
-  public Cuenta() {
+  /*public Cuenta() { //CODE SMELL: Logica Duplicada
     saldo = 0;
-  }
+  }*/
 
   public Cuenta(double montoInicial) {
     saldo = montoInicial;

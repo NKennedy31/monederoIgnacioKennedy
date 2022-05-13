@@ -20,6 +20,7 @@ public class MonederoTest {
   @Test
   void Poner() {
     cuenta.poner(1500);
+    assertEquals(, 1500);
   }
 
   @Test
