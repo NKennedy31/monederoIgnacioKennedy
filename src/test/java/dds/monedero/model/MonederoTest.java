@@ -9,13 +9,18 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.time.LocalDate;
 
 public class MonederoTest {
   private Cuenta cuenta;
+  private Movimiento movimiento;
 
   @BeforeEach
   void init() {
     cuenta = new Cuenta();
+    movimiento = new Movimiento(LocalDate.now(), 5000, true);
   }
 
   @Test
@@ -73,6 +78,11 @@ public class MonederoTest {
   @Test
   public void ExtraerMontoNegativo() {
     assertThrows(MontoNegativoException.class, () -> cuenta.sacar(-500));
+  }
+  
+  @Test
+  public void esMovimientoDeLaFecha() {
+	  assertTrue(movimiento.fueDepositado(LocalDate.now()));
   }
 
 }
